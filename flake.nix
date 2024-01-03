@@ -13,7 +13,7 @@
       pkgs = nixpkgs.legacyPackages.${system}.extend rust-overlay.overlays.default;
     in {
       default = self.packages.${system}.openaws-vpn-client;
-      openvpn = import ./openvpn.nix { inherit (pkgs) fetchpatch openvpn; };
+      openvpn = import ./openvpn.nix { inherit (pkgs) openvpn; };
       openaws-vpn-client = import ./openaws-vpn-client.nix {
           inherit (self.packages.${system}) openvpn;
           inherit (pkgs) makeWrapper rust-bin makeRustPlatform fetchFromGitHub lib pkg-config glib gtk3 wrapGAppsHook;
