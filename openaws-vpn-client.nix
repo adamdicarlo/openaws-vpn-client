@@ -1,5 +1,4 @@
-{ fetchFromGitHub
-, lib
+{ lib
 , glib
 , gtk3
 , pkg-config
@@ -7,14 +6,15 @@
 , rust-bin
 , wrapGAppsHook
 , openvpn
-, makeWrapper
+, makeBinaryWrapper
 }:
 let
   rustPlatform = makeRustPlatform {
     cargo = rust-bin.selectLatestNightlyWith (toolchain: toolchain.minimal);
     rustc = rust-bin.selectLatestNightlyWith (toolchain: toolchain.minimal);
   };
-in rustPlatform.buildRustPackage rec {
+
+in rustPlatform.buildRustPackage {
   pname = "openaws-vpn-client";
   version = "0.1.7";
 
@@ -26,7 +26,7 @@ in rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     wrapGAppsHook
-    makeWrapper
+    makeBinaryWrapper
     pkg-config
   ];
 
@@ -34,10 +34,13 @@ in rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-yjhGDiO0pMVw9KFEUbCCF16uPfuusrxBKbFQcHlKYqY=";
 
-  # postInstall = ''
-  #   wrapProgram $out/bin/openaws-vpn-client \
-  #     --set OPENVPN_FILE "${lib.makeBinPath [ openvpn ]}"
-  # '';
+  postInstall = ''
+    install -Dt $out/share/applications ./share/applications/openaws-vpn-client.desktop
+    install -Dt $out/share/openaws-vpn-client ./share/pwd.txt
+    wrapProgram $out/bin/openaws-vpn-client \
+      --set OPENVPN_FILE "${lib.makeBinPath [ openvpn ]}/openvpn" \
+      --set SHARED_DIR "$out/share/openaws-vpn-client"
+  '';
 
   meta = with lib; {
     description = "Unofficial open-source AWS VPN client written in Rust";

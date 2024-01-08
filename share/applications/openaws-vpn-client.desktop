@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=openaws-vpn-client
+Exec=openaws-vpn-client %U
+Terminal=false
+Type=Application
+Icon=openvpn
+StartupWMClass=openaws-vpn-client
+Comment=Open AWS VPN client
+Categories=Network;
+

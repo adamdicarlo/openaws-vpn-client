@@ -16,8 +16,8 @@
       openvpn = import ./openvpn.nix { inherit (pkgs) openvpn; };
       openaws-vpn-client = import ./openaws-vpn-client.nix {
           inherit (self.packages.${system}) openvpn;
-          inherit (pkgs) makeWrapper rust-bin makeRustPlatform fetchFromGitHub lib pkg-config glib gtk3 wrapGAppsHook;
-         };
+          inherit (pkgs) makeBinaryWrapper rust-bin makeRustPlatform lib pkg-config glib gtk3 wrapGAppsHook;
+      };
     };
   };
 }
